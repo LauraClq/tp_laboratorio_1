@@ -22,6 +22,9 @@ int informesGenerales(Passenger* list, int len, TypePassenger* listType, int len
 			switch(opcion)
 			{
 			case 1:
+				printPassengers(list, len, listType, lenType);
+				break;
+			case 2:
 				validaOrder = Utn_GetInt(&order,"De que forma desea ordenar? Ingrese 1 (Ascendente) o 0 (Descendente): ","\nError.Dato invalido solo numeros.\n",SORT_DESC,SORT_ASC,ATTEMPTS);
 				if(!validaOrder)
 				{
@@ -35,17 +38,17 @@ int informesGenerales(Passenger* list, int len, TypePassenger* listType, int len
 					}
 				}
 				break;
-			case 2:
+			case 3:
 				if(!sortTotalAveragePrice(list, len, listType, lenType))
 				{
 					printf("\nOperacion exitosa!!\n\n");
 				}
 				else
 				{
-					printf("\nError el calcular el promedio!!\n\n");
+					printf("\nError al calcular el promedio!!\n\n");
 				}
 				break;
-			case 3:
+			case 4:
 				validaOrder = Utn_GetInt(&order,"De que forma desea ordenar? Ingrese 1 (Ascendente) o 0 (Descendente): ","\nError.Dato invalido solo numeros.\n",SORT_DESC,SORT_ASC,ATTEMPTS);
 				if(!validaOrder)
 				{
@@ -63,7 +66,7 @@ int informesGenerales(Passenger* list, int len, TypePassenger* listType, int len
 					}
 				}
 				break;
-			case 4:
+			case 5:
 				salir = confirmacion("Desea salir del menu de los informes? s - n: ");
 				if(salir == 's')
 				{
@@ -130,6 +133,7 @@ int sortTotalAveragePrice(Passenger* list, int len, TypePassenger* listType, int
 	int contTotal = 0;
 	float acumPrice = 0;
 	float averagePrice = 0;
+	int cantPassengers = 0;
 	int flag = ERROR;
 
 
@@ -141,7 +145,7 @@ int sortTotalAveragePrice(Passenger* list, int len, TypePassenger* listType, int
 			{
 				contTotal++;
 				acumPrice += list[i].price;
-				Retorno = 1;
+				Retorno = OK;
 			}
 		}
 	}
@@ -152,19 +156,21 @@ int sortTotalAveragePrice(Passenger* list, int len, TypePassenger* listType, int
 	printf("El promedio de precios de los pasajes es: $%.2f\n\n",averagePrice);
 
 	printf("   *** LISTA DE PASAJEROS QUE SUPERAN EL PRECIO PROMEDIO ***\n");
-	printf(" -------------------------------------------------------------------------------------\n");
-	printf(" | ID  |   NAME   | LASTNAME |  PRICE   |  FLYCODE  | TYPEPASSENGER  | STATUSFLIGHT |\n");
-	printf(" -------------------------------------------------------------------------------------\n");
+	printf(" -------------------------------------------------------------------------------------------\n");
+	printf(" | ID  |     NAME     | LASTNAME |  PRICE   |   FLYCODE   |  TYPEPASSENGER  | STATUSFLIGHT |\n");
+	printf(" -------------------------------------------------------------------------------------------\n");
 	for(int i=0; i<len; i++)
 	{
 		if(!list[i].isEmpty && averagePrice > 0 && list[i].price > averagePrice)
 		{
 			onePassenger(&list[i],listType,lenType);
+			cantPassengers++;
 			flag = OK;
 		}
 	}
-	printf(" |_____|__________|__________|__________|___________|________________|______________|\n");
+	printf(" |_____|______________|__________|__________|_____________|_________________|______________|\n\n");
 
+	printf("En total %d pasajeros superan el precio promedio\n",cantPassengers);
 	if(flag == ERROR)
 	{
 		printf("No hay pasajeros que superen el precio del promedio\n");
@@ -213,9 +219,9 @@ int filterActive(Passenger* list, int len, TypePassenger* listType, int lenType)
 	if(list != NULL && len > 0 && listType != NULL && lenType > 0)
 	{
 		printf("\n  *** LISTA DE PASAJEROS CON STATUSFLIGHT ACTIVO ORDENADOS POR FLYCODE ***\n");
-		printf(" -------------------------------------------------------------------------------------\n");
-		printf(" | ID  |   NAME   | LASTNAME |   PRICE  |  FLYCODE  |  TYPEPASSENGER  | STATUSFLIGHT |\n");
-		printf(" -------------------------------------------------------------------------------------\n");
+		printf(" -------------------------------------------------------------------------------------------\n");
+		printf(" | ID  |     NAME     | LASTNAME |  PRICE   |   FLYCODE   |  TYPEPASSENGER  | STATUSFLIGHT |\n");
+		printf(" -------------------------------------------------------------------------------------------\n");
 		for(int i=0; i<len; i++)
 		{
 			if(!list[i].isEmpty && list[i].statusFlight == 1)
@@ -225,7 +231,7 @@ int filterActive(Passenger* list, int len, TypePassenger* listType, int lenType)
 				Retorno = OK;
 			}
 		}
-		printf(" |_____|__________|__________|__________|___________|_________________|______________|\n");
+		printf(" |_____|______________|__________|__________|_____________|_________________|______________|\n");
 
 		if(flag == ERROR)
 		{

@@ -1,8 +1,8 @@
 /*
  * Input.h
  *
- *  Created on: 28 may 2022
- *      Author: Laura
+ *  Created on: 6 jun 2022
+ *      Author: laura
  */
 
 #ifndef INPUT_H_
@@ -103,40 +103,4 @@ int esAlfaNumerico(char str[]);
 /// @return variable of type char s (yes) or n (no)
 char confirmacion(char mensaje[]);
 
-/// @brief validates that the string only contains non-numeric characters.
-///
-/// @param message message that the user receives.
-/// @param message message if the user makes a mistake.
-/// @param errorMessageLenght  message if the user exceeds the number of characters
-/// @param refAux the pointer where the string will be saved.
-/// @param lowLimit limit of characters that the string can contain.
-/// @param maxLenght limit of characters that the string can contain.
-/// @return ERROR(-1) if error or FUNCIONO(0) if OK.
-int Utn_GetStringName(char message[],char errorMessage[], char errorMessageLenght[],char* refAux, int lowLimit,int maxLenght);
-
-/// @brief receives the data entered by the user
-///
-/// @param mensaje message that the user receives.
-/// @param refAux the pointer where the string will be saved
-/// @return ERROR(-1) if error or FUNCIONO(0) if OK.
-int getStringCharacters(char mensaje[],char* refAux);
-
-/// @brief receives the data entered by the user
-///
-/// @param mensaje message that the user receives.
-/// @param input where we keep what we receive
-void getString(char mensaje[],char input[]);
-
-/// @brief validates that the string only contains non-numeric characters.
-///
-/// @param str data to validate.
-/// @return return 0 ERROR or return 1 OK
-int sonLetras(char str[]);
-
-/// @brief clean the enter
-///
-/// @param refAux the pointer where the string will be saved
-/// @param tam size of the string
-/// @return ERROR(-1) if error or FUNCIONO(0) if OK.
-int limpiarEnter(char input[], int tam);
 #endif /* INPUT_H_ */

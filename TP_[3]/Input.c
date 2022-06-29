@@ -1,8 +1,8 @@
 /*
  * Input.c
  *
- *  Created on: 28 may 2022
- *      Author: Laura
+ *  Created on: 15 jun 2022
+ *      Author: laura
  */
 #include "Input.h"
 #include <ctype.h>
@@ -79,7 +79,6 @@ int GetString(char* refAux, int limit)
 		{
 			auxString[strlen(auxString) - 1] = '\0';
 		}
-
 		if(strlen(auxString) <= limit)
 		{
 			strncpy(refAux,auxString,limit);
@@ -220,6 +219,15 @@ int IsChar(char* refAux)
 			{
 				break;
 			}
+			if (i == 0)
+			{
+				*(refAux + i) = toupper(*(refAux + i));
+			}
+			else
+			{
+				refAux[i] = tolower(refAux[i]);
+			}
+
 			i++;
 
 		}while(i < strlen(refAux));
@@ -311,92 +319,4 @@ char confirmacion(char mensaje[])
 	return confirma;
 }
 
-int Utn_GetStringName(char message[],char errorMessage[], char errorMessageLenght[],char* refAux, int lowLimit,int maxLenght)
-{
-    int retorno = ERROR;
-    char buffer[999];
 
-    while(1)
-    {
-        if(getStringCharacters(message,buffer) == ERROR)
-        {
-            printf ("%s\n",errorMessage);
-            continue;
-        }
-        if(strlen(buffer) > maxLenght || strlen(buffer) < lowLimit)
-        {
-            printf ("%s",errorMessageLenght);
-            continue;
-
-        }
-        retorno = OK;
-        strcpy(refAux,buffer);
-        break;
-
-    }
-
-     return retorno;
-}
-
-int getStringCharacters(char mensaje[],char* refAux)
-{
-    char aux[750];
-
-    getString(mensaje,aux);
-
-    if(sonLetras(aux))
-    {
-        strcpy(refAux,aux);
-        return OK;
-    }
-    return ERROR;
-}
-
-void getString(char mensaje[],char input[])
-{
-    printf("%s",mensaje);
-    fflush(stdin);
-    fgets(input,200,stdin);
-    limpiarEnter(input,200);
-}
-
-int limpiarEnter(char input[], int tam)
-{
-    int retorno = ERROR;
-
-    if(input != NULL && tam > 0)
-    {
-        for(int i=0; i < tam; i++)
-        {
-            if(input[i] == '\n')
-            {
-            	input[i] = '\0';
-                break;
-            }
-        }
-        retorno = OK;
-    }
-    return retorno;
-}
-
-int sonLetras(char str[])
-{
-   int i=0;
-   str = strlwr(str);
-
-   while(str[i] != '\0')
-   {
-       if((str[i] != ' ') && (str[i] < 'a' || str[i] > 'z') && (str[i] < 'A' || str[i] > 'Z'))
-           return 0;
-       if(i == 0)
-       {
-    	   str[i] = toupper(str[i]);
-       }
-       else if(str[i] == ' ')
-       {
-    	  str[i+1] = toupper(str[i+1]);
-       }
-       i++;
-   }
-   return 1;
-}

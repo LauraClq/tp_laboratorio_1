@@ -39,6 +39,7 @@ int main(void) {
 	int validAdd;
 	int validModify;
 	int validRemove;
+	int flagAltaForzada = NADA;
 
 	initPassengers(aPassengers,ELEMENTS);
 
@@ -107,20 +108,25 @@ int main(void) {
 			}
 			break;
 		case 4:
-			if(ingreso)
+			if(ingreso || flagAltaForzada)
 			{
 				informesGenerales(aPassengers,ELEMENTS,aTypePass,LEN_TYPE);
 			}
 			else
 			{
-				printf("Para informar primero dar de alta\n");
+				printf("Para informar primero dar de alta o forzar el alta\n");
 			}
 			break;
 		case 5:
-			if(!altaForzadaPassengers(aPassengers,ELEMENTS,&id))
+			if(!flagAltaForzada)
 			{
-				printf("ALTA FORZADA EXITOSA!!\n");
+				altaForzadaPassengers(aPassengers,ELEMENTS,&id);
 				printPassengers(aPassengers,ELEMENTS,aTypePass,LEN_TYPE);
+				flagAltaForzada = ALTA;
+			}
+			else
+			{
+				printf("Ya ingreso anteriormente al alta forzada\n");
 			}
 			break;
 		case 6:

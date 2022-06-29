@@ -16,18 +16,20 @@
 
 #define ELEMENTS 2000
 #define LEN_TYPE 4
-#define ATTEMPTS 5
+#define MIN_STRING 3
 #define TAM_STRING 51
 #define TAM_FLYCODE 10
 
+#define ATTEMPTS 8
+
 #define MIN_ID 100
-#define MAX_ID 109
+#define MAX_ID 2000
 
 #define SORT_ASC 1
 #define SORT_DESC 0
 
 #define MIN_PRICE 5000
-#define MAX_PRICE 20000
+#define MAX_PRICE 45000
 
 #define MIN_TYPE 1
 #define MAX_TYPE 4
@@ -37,7 +39,10 @@
 
 #define MIN_OPTION 1
 #define MAX_OPTION 6
-#define MAX_OPTION_INFORM 4
+#define MAX_OPTION_INFORM 5
+
+#define MIN 1
+#define MAX 10
 
 #define ERROR -1
 #define OK 0

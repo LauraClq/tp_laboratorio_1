@@ -36,9 +36,11 @@ int loadPassengers(Passenger* auxList, int* pId, TypePassenger* listType, int le
 
 	if(auxList != NULL && pId != NULL && listType != NULL && lenType > 0)
 	{
-		validName = Utn_GetString(auxListP.name,TAM_STRING,"Ingrese su nombre: ","\nError.Dato invalido solo permite letras.\n",ATTEMPTS);
+		printf("El id que se le asignara es: %d\n",*pId);
+
+		validName = Utn_GetStringName("Ingrese su nombre: ","\nError. Dato invalido solo permite letras.\n","\nError se excedio del limite y no permite campos vacios.\n",auxListP.name,MIN_STRING,TAM_STRING);
 		validLastName = Utn_GetString(auxListP.lastName,TAM_STRING,"Ingrese su apellido: ","\nError.Dato invalido solo permite letras.\n",ATTEMPTS);
-		validPrice = Utn_GetFloat(&auxListP.price,"Ingrese el precio del vuelo: ","\nError.Dato invalido solo permite numeros.(5000 - 20000).\n",MIN_PRICE,MAX_PRICE,ATTEMPTS);
+		validPrice = Utn_GetFloat(&auxListP.price,"Ingrese el precio del vuelo: ","\nError.Dato invalido solo permite numeros.(5000 - 450000).\n",MIN_PRICE,MAX_PRICE,ATTEMPTS);
 
 		printTypePassengers(listType, lenType);
 		validType = Utn_GetInt(&auxListP.typePassenger,"Ingrese el tipo de pasajero: ","\nError.Dato invalido solo permite numeros.(1 - 4).\n",MIN_TYPE,MAX_TYPE,ATTEMPTS);
@@ -49,7 +51,7 @@ int loadPassengers(Passenger* auxList, int* pId, TypePassenger* listType, int le
 			validTypePass(listType, lenType,auxListP.typePassenger);
 		}
 
-		validFlycode = Utn_GetStringAlphanumeric(auxListP.flycode,TAM_FLYCODE,"Ingrese el codigo del vuelo: ","\nError.Dato invalido fuera del rango de 10 caracteres.\n",ATTEMPTS);
+		validFlycode = Utn_GetStringAlphanumeric(auxListP.flycode,TAM_FLYCODE,"Ingrese el codigo del vuelo: ","\nError.Dato invalido solo permite numeros, letras y solo 10 caracteres.\n",ATTEMPTS);
 		validStatus = Utn_GetInt(&auxListP.statusFlight,"\n1 Activo - 2 Demorado - 3 Cancelado\nIngrese el estado de su vuelo: ","\nError.Dato invalido solo permite numeros.(1 - 3).\n",MIN_STATUS,MAX_STATUS,ATTEMPTS);
 
 
@@ -196,7 +198,7 @@ int modifyPassengerById(Passenger* list, int len, int index, TypePassenger* list
 				Retorno = OK;
 				break;
 			case 3:
-				Utn_GetFloat(&auxList.price,"Ingrese el nuevo precio del vuelo: ","\nError.Dato invalido solo permite numeros (5000 - 20000).\n",MIN_PRICE,MAX_PRICE,ATTEMPTS);
+				Utn_GetFloat(&auxList.price,"Ingrese el nuevo precio del vuelo: ","\nError.Dato invalido solo permite numeros (5000 - 450000).\n",MIN_PRICE,MAX_PRICE,ATTEMPTS);
 				list[index].price = auxList.price;
 				Retorno = OK;
 				break;
@@ -246,7 +248,7 @@ int removePassenger(Passenger* list, int len, int id, TypePassenger* listType, i
 			printf("\n");
 			onePassenger(&list[index],listType,lenType);
 			confirma = confirmacion("\nDesea confirmar a dar de baja (s - n)?: ");
-			printf("%c\n",confirma);
+
 			if(confirma == 's')
 			{
 				list[index].isEmpty = FREE;
@@ -293,9 +295,9 @@ int printPassengers(Passenger* list, int length, TypePassenger* listType, int le
 	if(list != NULL && length > 0 && listType != NULL && lenType > 0)
 	{
 		printf("                          *** LISTA DE PASAJEROS ***\n\n");
-		printf(" -------------------------------------------------------------------------------------\n");
-		printf(" | ID  |   NAME   | LASTNAME |  PRICE   |  FLYCODE  |  TYPEPASSENGER  | STATUSFLIGHT |\n");
-		printf(" -------------------------------------------------------------------------------------\n");
+		printf(" -------------------------------------------------------------------------------------------\n");
+		printf(" | ID  |     NAME     | LASTNAME |  PRICE   |   FLYCODE   |  TYPEPASSENGER  | STATUSFLIGHT |\n");
+		printf(" -------------------------------------------------------------------------------------------\n");
 		for(int i=0; i<length; i++)
 		{
 			if(!list[i].isEmpty)
@@ -305,7 +307,7 @@ int printPassengers(Passenger* list, int length, TypePassenger* listType, int le
 				Retorno = OK;
 			}
 		}
-		printf(" |_____|__________|__________|__________|___________|_________________|______________|\n");
+		printf(" |_____|______________|__________|__________|_____________|_________________|______________|\n");
 
 		if(flag == ERROR)
 		{
@@ -339,7 +341,7 @@ int onePassenger(Passenger* passenger, TypePassenger* listType, int lenType)
 	}
 	if(passenger != NULL && listType != NULL && lenType > 0 && !validDescription && status != NULL)
 	{
-		printf(" | %-3d | %-8s | %-8s | %-8.2f |   %-4s    | %-15s |  %-10s  |\n",
+		printf(" | %-3d | %-12s | %-8s | %-8.2f |   %-6s    | %-15s |  %-10s  |\n",
 				passenger->id,
 				passenger->name,
 				passenger->lastName,
@@ -357,6 +359,12 @@ int onePassenger(Passenger* passenger, TypePassenger* listType, int lenType)
 int altaForzadaPassengers(Passenger* list, int len, int* pId)
 {
 	int Retorno = ERROR;
+	int index;
+	int cant;
+	int j = 0;
+
+	Utn_GetInt(&cant,"Ingrese la cantidad que desea insertar entre (1 - 10): ","Error dato invalido solo numeros.\n",MIN,MAX,ATTEMPTS);
+
 	Passenger altaPassengers[] =
 	{
 			{0,"Laura","Rufalo",5000.12,"aab1",1,1,0},
@@ -373,13 +381,23 @@ int altaForzadaPassengers(Passenger* list, int len, int* pId)
 
 	if(list != NULL && len > 0 && pId != NULL)
 	{
-		for(int i=0; i<len; i++)
-		{
-			list[i] = altaPassengers[i];
-			list[i].id = *pId;
-			(*pId)++;
-		}
 		Retorno = OK;
+		findPositionFree(list, len, &index);
+
+		if(index != ERROR)
+		{
+			for(int i=index; i<(cant+index); i++)
+			{
+				list[i] = altaPassengers[j];
+				list[i].id = *pId;
+				(*pId)++;
+				j++;
+			}
+		}
+		else
+		{
+			Retorno = ERROR;
+		}
 	}
 
 	return Retorno;
